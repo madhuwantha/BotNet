@@ -26,7 +26,7 @@ def sshLogin(user, ip, password):
         p = paramiko.SSHClient()
         p.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         p.connect(ip, port=22, username=user, password=password)
-        stdin, stdout, stderr = p.exec_command("ls -al")
+        stdin, stdout, stderr = p.exec_command("echo "+password+" | sudo -S mkdir /home/kabali")
         opt = stdout.readlines()
         opt = "".join(opt)
         threadSafePrint(opt)

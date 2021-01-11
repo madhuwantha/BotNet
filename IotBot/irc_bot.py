@@ -1,6 +1,6 @@
-from IotBot.irc_class import IRC
+from irc_class import IRC
 
-server = "10.50.60.181"
+server = "192.168.8.101"
 port = 7000
 irc = IRC()
 

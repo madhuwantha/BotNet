@@ -2,7 +2,7 @@ import socket
 from threading import Thread
 import time
 
-bot_ip = "10.50.60.182"
+bot_ip = "192.168.8.105"
 
 
 def botThread(conn, addr):
@@ -10,8 +10,9 @@ def botThread(conn, addr):
     conn.send(bytes('START ' + "" + '\r\n', "UTF-8"))
     while True:
         try:
-            cmd = conn.recv(2048)
+            cmd = conn.recv(2048).decode("UTF-8")
             print(cmd)
+            conn.send(bytes('START ' + "" + '\r\n', "UTF-8"))
             broadcast(cmd, conn)
         except:
             continue
@@ -77,7 +78,7 @@ def remove(connection):
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-IP_address = str('10.50.60.181')
+IP_address = str('192.168.8.101')
 Port = int('7000')
 server.bind((IP_address, Port))
 

