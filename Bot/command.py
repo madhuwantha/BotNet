@@ -12,4 +12,4 @@ while True:
     if resp.find('START') != -1:
         print("Enter the command for bonnet")
         cmd = input()
-        bot.send(bytes('CMD ' + cmd + '\r\n', "UTF-8"))
+        bot.send(bytes('CMD :' + cmd + '\r\n', "UTF-8"))
