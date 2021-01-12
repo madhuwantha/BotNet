@@ -3,6 +3,8 @@ from threading import Thread
 import time
 
 bot_ip = "192.168.8.105"
+list_of_clients = []
+threads = []
 
 
 def botThread(conn, addr):
@@ -52,15 +54,18 @@ def broadcast(message, connection):
     :param connection:
     :return:
     """
-    for clients in list_of_clients:
-        if clients != connection:
+    print("Starting broadcasting...")
+    for client in list_of_clients:
+        print("broadcasting to ", client)
+        if client != connection:
             try:
-                clients.send(message)
+                client.send(bytes(message + "" + '\r\n', "UTF-8"))
+                print("broadcasted ", client)
             except:
-                clients.close()
-
+                print("could not broadcasting to ", client)
+                client.close()
                 # if the link is broken, we remove the client
-                remove(clients)
+                remove(client)
 
 
 def remove(connection):
@@ -87,9 +92,6 @@ listens for 100 active connections. This number can be
 increased as per convenience. 
 """
 server.listen(100)
-
-list_of_clients = []
-threads = []
 while True:
     print("Waiting for client to connect...")
     conn, addr = server.accept()
