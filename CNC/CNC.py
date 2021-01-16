@@ -2,7 +2,7 @@ import socket
 from threading import Thread
 import time
 
-bot_ip = "192.168.8.105"
+bot_ip = "172.24.4.88"
 list_of_clients = []
 threads = []
 
@@ -83,7 +83,7 @@ def remove(connection):
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-IP_address = str('192.168.8.101')
+IP_address = str('172.24.4.91')
 Port = int('7000')
 server.bind((IP_address, Port))
 
