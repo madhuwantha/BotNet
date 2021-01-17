@@ -1,5 +1,5 @@
 import socket
-server = "172.24.4.91"
+server = "172.24.4.48"
 port = 7000
 # python3 /home/kabali/BotNet/IotBot/addons/slowLoris.py 192.168.8.102 80
 

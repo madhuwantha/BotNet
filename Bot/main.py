@@ -76,7 +76,7 @@ def scan(q, network):
     newConnectedIp = []
     while True:
         for ip in network:
-            scanner_t1.scan(hosts=ip, arguments='-sn')
+            scanner_t1.scan(hosts=ip, arguments='-Pn -sS')
             threadSafePrint("Already found Ip ", newConnectedIp)
             threadSafePrint("Scanned :", scanner_t1.all_hosts())
             for newIp in scanner_t1.all_hosts():
@@ -118,8 +118,8 @@ def attack(q):
 
 
 if __name__ == '__main__':
-    b = BotNet.BotNet(networks=["192.168.8.0/24"])
-    network = ["192.168.8.0/24"]
+    b = BotNet.BotNet(networks=["10.1.0.0/24"])
+    network = ["10.1.0.0/24"]
 
     q = Queue()
     t1 = Thread(target=scan, args=(q, network))
