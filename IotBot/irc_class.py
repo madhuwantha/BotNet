@@ -1,7 +1,7 @@
 import socket
 import time
 
-from addons.shell import shell
+import shell
 
 
 class IRC:
