@@ -1,6 +1,7 @@
 from irc_class import IRC
 
-server = "192.168.8.101"
+# C&C IP address
+server = "10.0.0.72"
 port = 7000
 irc = IRC()
 

