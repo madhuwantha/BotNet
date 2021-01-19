@@ -127,4 +127,4 @@ if __name__ == '__main__':
     t2 = Thread(target=attack, args=(q,))
     t1.start()
     t2.start()
-    # sshLogin("user", "10.1.0.114", "abcd")
+    sshLogin("user", "10.1.0.114", "password")
