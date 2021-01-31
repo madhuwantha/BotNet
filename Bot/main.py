@@ -51,7 +51,7 @@ def sshLogin(user, ip, password):
         
         echo ''' + password + '''| sudo echo 'respawn' >> /etc/init/my.conf
 
-        echo ''' + password + '''| sudo stop my
+        echo ''' + password + '''| sudo start my
         echo ''' + password + '''| sudo status my 
         exit
         '''
