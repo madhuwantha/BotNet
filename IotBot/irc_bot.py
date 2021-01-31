@@ -10,7 +10,11 @@ try:
 except:
     print("Could not connected")
 
-while True:
-    text = irc.get_response()
 
-irc.close()
+try:
+    while True:
+        text = irc.get_response()
+except KeyboardInterrupt:
+    print("Press Ctrl-C to terminate while statement")
+    irc.close()
+

