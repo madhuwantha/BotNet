@@ -13,7 +13,7 @@ class IRC:
 
     def send(self, channel, msg):
         # Transfer data
-        self.irc.send(bytes("PRIVMSG " + channel + " " + msg + "\n", "UTF-8"))
+        self.irc.send(bytes("PRIVMSG " + channel + msg + "\n", "UTF-8"))
 
     def connect(self, server, port):
         # Connect to the server
@@ -33,9 +33,7 @@ class IRC:
             shell(cmd)
 
         if resp.find('PING') != -1:
-            # print(resp)
-            self.irc.send(bytes('PONG ' + "" + '\r\n', "UTF-8"))
-
+            self.irc.send(bytes('PONG ' + '\r\n', "UTF-8"))
         return resp
 
     def close(self):

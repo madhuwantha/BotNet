@@ -13,6 +13,4 @@ except:
 while True:
     text = irc.get_response()
 
-    # TODO: fro action ( if message has a command )
-
 irc.close()

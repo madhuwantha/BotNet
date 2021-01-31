@@ -32,7 +32,7 @@ def iotThread(conn, addr):
             dif = abs(time.time() - start)
             if dif > 5:
                 try:
-                    conn.send(bytes('PING ' + "" + '\r\n', "UTF-8"))
+                    conn.send(bytes('PING ' + '\r\n', "UTF-8"))
                     message = conn.recv(2048)
                     # print(message)
                 except:
