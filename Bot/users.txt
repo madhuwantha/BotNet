@@ -3,12 +3,7 @@ hello
 myrouter
 router
 mydevice
-camera
 root
-home
-homerouter
-iot
-bulbecirros
 pi
 user
 root
