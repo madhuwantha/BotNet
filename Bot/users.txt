@@ -3,12 +3,12 @@ hello
 myrouter
 router
 mydevice
+camera
+root
 home
 homerouter
 iot
-bulbe
-camera
-cirros
+bulbecirros
 pi
 user
 root
