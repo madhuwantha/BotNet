@@ -11,4 +11,5 @@ camera
 cirros
 pi
 user
+root
 csdcsd
