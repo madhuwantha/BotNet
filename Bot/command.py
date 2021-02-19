@@ -1,5 +1,5 @@
 import socket
-server = "172.24.4.48"
+server = "172.24.4.126"
 port = 7000
 # python3 /home/kabali/IotBot/slowLoris.py 10.0.0.36 80
 
