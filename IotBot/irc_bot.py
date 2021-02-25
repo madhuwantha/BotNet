@@ -18,3 +18,8 @@ except KeyboardInterrupt:
     print("Press Ctrl-C to terminate while statement")
     irc.close()
 
+
+# from shell import shell
+#
+# shell("ls")
+
