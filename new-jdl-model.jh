@@ -1,0 +1,51 @@
+entity Letter {
+	name String,
+    date Date
+}
+
+entity Request {
+	date Date
+}
+
+entity LetterType {
+	name String
+}
+
+entity LetterReservedBy {
+	date Date
+}
+entity StaffMember {
+	name String,
+    phoneNumber Loag
+}
+entity StaffMemberDetail {
+
+}
+entity Position{
+	name String
+}
+entity Department {
+	name String
+    code String
+}
+
+
+relationship ManyToMany {
+	StaffMember{staffMemberDetail(id)} to StaffMemberDetail{id}
+}
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Department to StaffMemberDetail{department},
+	Position to StaffMemberDetail{position},
+    StaffMember to LetterReservedBy{staffMember},
+    Letter to LetterReservedBy{letter},
+    LetterType to Letter{leterType},
+    Letter to Request{letter},
+    StaffMember to Request{requestSendTo},
+}
+
+
+
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
